@@ -58,10 +58,15 @@ public class ParticipantService {
 		return participant;
 	}
 
-	public Participant edit(Participant newParticiant, Participant oldParticipant) {
+	public void update(Participant participant) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().update(participant);
+		transaction.commit();
+	}
+
+	/*public void setPassword(Participant newParticiant, Participant oldParticipant) {
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().update(newParticiant);
 		transaction.commit();
-		return newParticiant;
-	}
+	}*/
 }

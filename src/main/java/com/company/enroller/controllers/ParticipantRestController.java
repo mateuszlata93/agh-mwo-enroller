@@ -52,11 +52,14 @@ public class ParticipantRestController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateParticipant(@RequestBody Participant participant, @PathVariable("id") String login) {
-		if (participantService.findByLogin(login) == null) {
+	public ResponseEntity<?> updateParticipant(@RequestBody Participant updatedParticipant, @PathVariable("id") String login) {
+		Participant foundParticipant = participantService.findByLogin(login);
+		if (foundParticipant == null) {
 			return new ResponseEntity("Unable to update. A participant with login " + login + " does not exist.", HttpStatus.NOT_FOUND);
 		}
-		participantService.edit(participant, participantService.findByLogin(login));
-		return new ResponseEntity<>(participant, HttpStatus.OK);
+		participantService.update(foundParticipant);
+		foundParticipant.setPassword(updatedParticipant.getPassword());
+		//participantService.update(foundParticipant);
+		return new ResponseEntity<>(updatedParticipant, HttpStatus.OK);
 	}
 }
