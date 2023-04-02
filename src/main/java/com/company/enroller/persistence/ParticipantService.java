@@ -2,6 +2,8 @@ package com.company.enroller.persistence;
 
 import java.util.Collection;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -22,4 +24,44 @@ public class ParticipantService {
 		return query.list();
 	}
 
+	public Participant findByLogin(String login) {
+		/*String hql = "from Participant P where P.login =:login";
+		Query query = connector.getSession().createQuery(hql);
+		query.setParameter("login", login);
+		return (Participant) query.getSingleResult();*/
+
+		return (Participant) connector.getSession().get(Participant.class, login);
+	}
+
+	/*public Participant createParticipant(String login, String password){
+		Participant participant = new Participant();
+		participant.setLogin(login);
+		participant.setPassword(password);
+		Session session = connector.getSession();
+		Transaction transaction = session.getSession().beginTransaction();
+		session.save(participant);
+		transaction.commit();
+		return participant;
+	}*/
+
+	public Participant add(Participant participant){
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().save(participant);
+		transaction.commit();
+		return participant;
+	}
+
+	public Participant delete(Participant participant){
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().delete(participant);
+		transaction.commit();
+		return participant;
+	}
+
+	public Participant edit(Participant newParticiant, Participant oldParticipant) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().update(newParticiant);
+		transaction.commit();
+		return newParticiant;
+	}
 }
